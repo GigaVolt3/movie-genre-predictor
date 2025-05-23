@@ -109,7 +109,7 @@ def predict():
         runtime_norm = (duration - df['runtime'].min()) / (df['runtime'].max() - df['runtime'].min())
 
         distances = calculate_distances(df, budget_norm, runtime_norm)
-        k = 5
+        k = 79
         k_nearest = get_k_nearest_neighbors(distances, k)
         all_distances = distances[:1000]
 
