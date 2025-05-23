@@ -94,7 +94,7 @@ def predict_genre(df, neighbors):
 df = load_and_preprocess_data()
 
 # Define K value at the module level for easy access
-K_VALUE = 79
+K_VALUE = 5
 
 @app.route('/')
 def home():
@@ -146,7 +146,7 @@ def predict():
         return jsonify({
             'status': 'success',
             'prediction': prediction,
-            'best_k': k,
+            'best_k': K_VALUE,  # Use the module-level K_VALUE
             'k_nearest': k_nearest_data,
             'all_distances': all_distances_data
         })
