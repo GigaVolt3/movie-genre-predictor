@@ -337,14 +337,14 @@
 
     function toggleAdvancedView() {
       const advancedView = document.getElementById('advancedView');
-      const toggleBtn = advancedView.querySelector('.toggle-advanced');
+      const toggleBtn = document.querySelector('.toggle-advanced');
       
       if (advancedView.style.display === 'block') {
         advancedView.style.display = 'none';
-        toggleBtn.textContent = 'Show Advanced View';
+        if (toggleBtn) toggleBtn.textContent = 'Show Advanced View';
       } else {
         advancedView.style.display = 'block';
-        toggleBtn.textContent = 'Hide Advanced View';
+        if (toggleBtn) toggleBtn.textContent = 'Hide Advanced View';
       }
     }
 
