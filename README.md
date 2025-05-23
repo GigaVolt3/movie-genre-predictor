@@ -10,6 +10,3 @@ A web application that predicts movie genres based on budget, duration, and dire
 
 ```
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
