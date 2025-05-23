@@ -93,10 +93,13 @@ def predict_genre(df, neighbors):
 
 df = load_and_preprocess_data()
 
+# Define K value at the module level for easy access
+K_VALUE = 79
+
 @app.route('/')
 def home():
     directors = sorted(df['director'].dropna().unique())
-    return render_template('index.html', directors=directors)
+    return render_template('index.html', directors=directors, k_value=K_VALUE)
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -109,8 +112,7 @@ def predict():
         runtime_norm = (duration - df['runtime'].min()) / (df['runtime'].max() - df['runtime'].min())
 
         distances = calculate_distances(df, budget_norm, runtime_norm)
-        k = 79
-        k_nearest = get_k_nearest_neighbors(distances, k)
+        k_nearest = get_k_nearest_neighbors(distances, K_VALUE)  # Use the module-level K_VALUE
         all_distances = distances[:1000]
 
         prediction = predict_genre(df, k_nearest)

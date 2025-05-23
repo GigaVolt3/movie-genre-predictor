@@ -176,6 +176,16 @@
       margin-top: 5px;
       z-index: 1000;
     }
+    
+    .table-responsive {
+      overflow-x: auto;
+      max-height: 600px;
+      overflow-y: auto;
+      display: block;
+      margin: 15px 0;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+    }
     .dropdown-list div {
       padding: 10px;
       cursor: pointer;
@@ -224,7 +234,7 @@
         <div class="toggle-advanced" onclick="toggleAdvancedView()">Hide Advanced View</div>
         
         <div id="kNearestSection">
-          <h3>Top K Nearest Neighbors (k=<span id="kValue">5</span>)</h3>
+          <h3>Top K Nearest Neighbors (k={{ k_value }})</h3>
           <div class="table-responsive">
             <table id="kNearestTable">
               <thead>
