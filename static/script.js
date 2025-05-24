@@ -49,11 +49,23 @@ document.addEventListener('DOMContentLoaded', function() {
         // Get form values
         const budget = budgetInput.value.trim();
         const duration = durationInput.value.trim();
-        const director = directorSelect.value;
+        const director = directorSelect ? directorSelect.value : '';
         
-        // Simple validation
-        if (!budget || !duration || !director) {
-            showError('Please fill in all fields');
+        console.log('Form values:', { budget, duration, director });
+        
+        // Validation
+        if (!budget || isNaN(parseFloat(budget))) {
+            showError('Please enter a valid budget');
+            return;
+        }
+        
+        if (!duration || isNaN(parseInt(duration)) || parseInt(duration) <= 0) {
+            showError('Please enter a valid duration in minutes');
+            return;
+        }
+        
+        if (!director) {
+            showError('Please select a director');
             return;
         }
         

@@ -189,23 +189,40 @@ def knn_predict(k, test_movie, director_encoding):
 
 @app.route('/')
 def home():
-    # Get unique directors from movies
-    unique_directors = sorted(list(set(movie['director'] for movie in movies if movie['director'].strip())))  # Filter out empty director names
-    return render_template('index.html', directors=unique_directors, genres=sorted(genres))
+    try:
+        # Get unique directors from movies, ensuring we have valid director names
+        unique_directors = sorted(list(set(movie['director'] for movie in movies if movie.get('director', '').strip())))
+        
+        if not unique_directors:
+            print("Warning: No directors found in the dataset")
+            unique_directors = ["Unknown Director"]
+            
+        print(f"Rendering template with {len(unique_directors)} directors")
+        return render_template('index.html', directors=unique_directors, genres=sorted(genres))
+    except Exception as e:
+        print(f"Error in home route: {str(e)}")
+        # Return default values in case of error
+        return render_template('index.html', directors=["Unknown Director"], genres=[])
 
 @app.route('/predict', methods=['POST'])
 def predict():
     data = request.json
+    print(f"Received prediction request: {data}")
     
     # Generate test movie
     try:
+        director = data.get('director', '').strip()
+        if not director:
+            return jsonify({'error': 'Director name is required'}), 400
+            
         test_movie = {
-            'budget': float(data['budget']) * 10000000,  # Convert from crores to actual amount
-            'duration': int(data['duration']),
-            'director': data['director'],
+            'budget': float(data.get('budget', 0)) * 10000000,  # Convert from crores to actual amount
+            'duration': int(float(data.get('duration', 0))),
+            'director': director,
             'title': 'Your Movie'  # Placeholder for the test movie
         }
-    except (ValueError, KeyError) as e:
+        print(f"Created test movie: {test_movie}")
+    except (ValueError, TypeError) as e:
         return jsonify({'error': f'Invalid input data: {str(e)}'}), 400
     
     # Normalize features
