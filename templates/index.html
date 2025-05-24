@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Genre Predictor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>🎬 Movie Genre Predictor</h1>
+        <p class="subtitle">Predict a movie's genre based on budget, duration, and director</p>
+        
+        <div class="form-container">
+            <div class="form-group">
+                <label for="budget">Budget (in crores):</label>
+                <div class="input-with-tooltip">
+                    <input type="text" id="budget" placeholder="e.g., 100" inputmode="decimal" pattern="[0-9]*\.?[0-9]*" required>
+                    <span class="tooltip">Enter budget in crores (e.g., 100 for ₹100 crores)</span>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="duration">Duration (in minutes):</label>
+                <input type="number" id="duration" placeholder="e.g., 120" min="1" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="director">Director:</label>
+                <select id="director" class="director-select" required>
+                    <option value="" disabled selected>Search or select a director</option>
+                    {% for director in directors %}
+                        <option value="{{ director }}">{{ director }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <button id="predict-btn">Predict Genre</button>
+        </div>
+        
+        <div id="result" class="result-container">
+            <h2>Prediction Result</h2>
+            <div class="prediction-summary">
+                <div class="prediction-item">
+                    <span class="prediction-label">Predicted Genre:</span>
+                    <span id="prediction" class="prediction">-</span>
+                </div>
+                <div class="prediction-item">
+                    <span class="prediction-label">Confidence:</span>
+                    <span id="confidence">-</span>
+                </div>
+            </div>
+            
+            <div class="tabs">
+                <button class="tab-button active" onclick="showTab('neighbors')">Nearest Neighbors</button>
+                <button class="tab-button" onclick="showTab('distribution')">Genre Distribution</button>
+            </div>
+            
+            <div id="neighbors-tab" class="tab-content active">
+                <div class="table-container">
+                    <table id="neighbors-table" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Title</th>
+                                <th>Genre</th>
+                                <th>Director</th>
+                                <th>Budget (Cr)</th>
+                                <th>Duration (min)</th>
+                                <th>Distance</th>
+                            </tr>
+                        </thead>
+                        <tbody id="neighbors-body">
+                            <!-- Will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div id="distribution-tab" class="tab-content">
+                <div class="table-container">
+                    <table id="distribution-table" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Genre</th>
+                                <th>Count</th>
+                                <th>Percentage</th>
+                                <th>Vote</th>
+                            </tr>
+                        </thead>
+                        <tbody id="distribution-body">
+                            <!-- Will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        // Initialize Select2 for director dropdown
+        document.addEventListener('DOMContentLoaded', function() {
+            $('.director-select').select2({
+                placeholder: 'Search or select a director',
+                allowClear: true,
+                width: '100%',
+                theme: 'bootstrap',
+                dropdownParent: $('.form-container')
+            });
+        });
+    </script>
+</body>
+</html>
